@@ -4,15 +4,20 @@
     </x-slot>
 
     <h1>Create New Category</h1>
-    <form id="category_form" method="post" action="{{ $category->id ? route('categories.update', [$category->id]) : route('categories.store') }}" enctype="multipart/form-data">
+
+    @if($category->exists)
+    <form id="category_form" method="post" action="{{ route('categories.update', [$category->id]) }}" enctype="multipart/form-data">
+        @method('PUT')
+    @else
+    <form id="category_form" method="post" action="{{ route('categories.store') }}" enctype="multipart/form-data">
+    @endif
         @csrf
-        @if($category->id)
-            @method('PUT')
-        @endif
         <div class="form-floating mb-3">
-            <input class="form-control" id="categoryName" type="text" placeholder="Category Name" name="name" value="{{ $category->name ?? '' }}" />
+            <input class="form-control @error('name') is-invalid @enderror" id="categoryName" type="text" placeholder="Category Name" name="name" value="{{ old('name', $category->name) }}" />
             <label for="categoryName">Category Name</label>
-            <div class="invalid-feedback">Category Name is required.</div>
+            @error('name')
+            <div class="invalid-feedback w-100">{{ $message }}</div>
+            @enderror
         </div>
         <div class="mb-3">
             <label for="formFile" class="form-label">Category Icon</label>

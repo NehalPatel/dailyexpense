@@ -10,9 +10,9 @@
         </div>
         <div class="card-body">
 
-            @if (session('status'))
+            @if (session('message'))
                 <div class="alert alert-success">
-                    {{ session('status') }}
+                    {{ session('message') }}
                 </div>
             @endif
 
@@ -21,7 +21,7 @@
                     <tr>
                         <th scope="col" width="50">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col" width="200" class="text-center">Action</th>
+                        <th scope="col" width="250" class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,15 @@
                         <td>{{ $category->name }}</td>
                         <td class="text-center">
                             <a href="{{ route('categories.edit', $category->id)  }}" class="btn btn-outline-success">Edit</a>
-                            <a href="{{ route('categories.destroy', $category->id) }}" class="btn btn-outline-danger">Delete</a>
+
+                            <form action="{{ route('categories.destroy', $category) }}"
+                                  method="post" class="d-inline-block"
+                                  onsubmit="return confirm('Are you sure want to delete?');">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+
                         </td>
                     </tr>
                     @endforeach

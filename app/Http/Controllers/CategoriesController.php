@@ -15,7 +15,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate();
+        $categories = Category::paginate(10);
         return view('category.list', ['categories' => $categories]);
     }
 
@@ -26,7 +26,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('category.create');
+        return view('category.create', ['category' => new Category()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class CategoriesController extends Controller
     {
         Category::create($request->all());
 
-        return redirect()->route('categories.index')->with('status', 'New category created !');
+        return redirect()->route('categories.index')->with('message', 'New category created !');
     }
 
     /**
@@ -74,7 +74,7 @@ class CategoriesController extends Controller
     public function update(Category $category, CategoryRequest $request)
     {
         $category->update($request->all());
-        return redirect()->route('categories.index')->with('status', 'Category updated!');
+        return redirect()->route('categories.index')->with('message', 'Category updated!');
     }
 
     /**
@@ -85,7 +85,7 @@ class CategoriesController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->destroy();
-        return redirect()->route('categories.index')->with('status', 'Category deleted!');
+        $category->delete();
+        return redirect()->route('categories.index')->with('message', 'Category deleted!');
     }
 }
